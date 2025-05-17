@@ -6,20 +6,29 @@ pipeline {
     }
 
     stages {
+        stage('环境检测') {
+            steps {
+                sh 'echo "🛠 检查构建环境..."'
+                sh 'which mvn || echo "❌ Maven 未安装"'
+                sh 'which docker || echo "❌ Docker 未安装"'
+                sh 'which kubectl || echo "❌ kubectl 未安装"'
+            }
+        }
+
         stage('构建 Jar') {
             steps {
+                echo '📦 开始构建模块...'
                 sh 'mvn clean install -DskipTests'
             }
         }
 
         stage('构建 Docker 镜像') {
             steps {
+                echo '🧱 开始构建服务镜像...'
                 script {
                     def services = ['eureka-service', 'user-service', 'movie-service', 'order-service']
                     for (svc in services) {
-                        sh """
-                            docker build -t ${svc}:${IMAGE_TAG} ${svc}
-                        """
+                        sh "docker build -t ${svc}:${IMAGE_TAG} ${svc}"
                     }
                 }
             }
@@ -27,6 +36,7 @@ pipeline {
 
         stage('部署到 Kubernetes') {
             steps {
+                echo '🚀 开始部署到 K8s 集群...'
                 sh """
                     kubectl apply -f k8s/eureka-deployment.yaml
                     kubectl apply -f k8s/eureka-service.yaml
@@ -46,7 +56,7 @@ pipeline {
             echo '✅ 部署成功'
         }
         failure {
-            echo '❌ 部署失败'
+            echo '❌ 部署失败，请查看控制台日志'
         }
     }
 }
