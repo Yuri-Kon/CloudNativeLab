@@ -8,6 +8,8 @@ pipeline {
     stages {
         stage('环境检测') {
             steps {
+                sh 'docker version'
+                sh 'kubectl version --client'
                 sh 'echo "🛠 检查构建环境..."'
                 sh 'which mvn || echo "❌ Maven 未安装"'
                 sh 'which docker || echo "❌ Docker 未安装"'
