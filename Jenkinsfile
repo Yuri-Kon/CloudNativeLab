@@ -3,23 +3,16 @@ pipeline {
 
     environment {
         IMAGE_TAG = "1.0"
-        REGISTRY = "localhost"  // 若推送远程仓库可改为 registry URL
     }
 
-//     stages {
-//         stage('拉取代码') {
-//             steps {
-//                 git 'https://github.com/Yuri-Kon/CloudNativeLab.git'
-//             }
-//         }
-
+    stages {
         stage('构建 Jar') {
             steps {
                 sh 'mvn clean install -DskipTests'
             }
         }
 
-        stage('构建镜像') {
+        stage('构建 Docker 镜像') {
             steps {
                 script {
                     def services = ['eureka-service', 'user-service', 'movie-service', 'order-service']
@@ -50,10 +43,10 @@ pipeline {
 
     post {
         success {
-            echo '部署成功 ✅'
+            echo '✅ 部署成功'
         }
         failure {
-            echo '部署失败 ❌'
+            echo '❌ 部署失败'
         }
     }
 }
