@@ -6,12 +6,12 @@ pipeline {
         REGISTRY = "localhost"  // 若推送远程仓库可改为 registry URL
     }
 
-    stages {
-        stage('拉取代码') {
-            steps {
-                git 'https://gitee.com/yourname/ticket-system.git'
-            }
-        }
+//     stages {
+//         stage('拉取代码') {
+//             steps {
+//                 git 'https://github.com/Yuri-Kon/CloudNativeLab.git'
+//             }
+//         }
 
         stage('构建 Jar') {
             steps {
