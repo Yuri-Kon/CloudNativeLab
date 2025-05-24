@@ -8,12 +8,6 @@ pipeline {
             }
         }
 
-        stage('Maven 构建') {
-            steps {
-                sh 'mvn clean install -DskipTests'
-            }
-        }
-
         stage('构建 Docker 镜像') {
             steps {
                 sh 'docker build -t my-simple-app:latest .'
