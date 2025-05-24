@@ -1,0 +1,35 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: gateway-service
+
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=1
+
+        - id: movie-service
+          uri: lb://movie-service
+          predicates:
+            - Path=/movie/**
+          filters:
+            - StripPrefix=1   # /movie/moives → /moives
+
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/order/**
+          filters:
+            - StripPrefix=1   # /order/orders → /orders
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
