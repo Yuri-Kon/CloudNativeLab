@@ -6,6 +6,11 @@ pipeline {
     }
 
     stages {
+        stage('拉取代码') {
+            steps {
+                git 'https://github.com/Yuri-Kon/CloudNativeLab.git'
+            }
+        }
 
         stage('Maven 构建') {
             steps {
