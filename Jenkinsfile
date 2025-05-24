@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = 'simple-app:latest'
+    }
+
     stages {
         stage('拉取代码') {
             steps {
@@ -8,9 +12,15 @@ pipeline {
             }
         }
 
+        stage('Maven 构建') {
+            steps {
+                sh 'mvn clean install -DskipTests'
+            }
+        }
+
         stage('构建 Docker 镜像') {
             steps {
-                sh 'docker build -t my-simple-app:latest .'
+                sh 'docker build -t $IMAGE_NAME .'
             }
         }
 
